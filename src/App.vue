@@ -1,58 +1,71 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ message }}</h1>
-    <p>{{ 'Hola' + 'Mundo' }}</p>
-    <p v-show="showValue.show">{{ showValue.text }}</p>
-    <hr>
-    <input v-model="name" type="text"><br>
-    <input v-model="lastName" type="text">
-    <p>{{ name + " " + lastName }}</p>
-    <a :href="link">Link a YouTube</a>
-    <br>
-    <button v-on:click="format">Format</button>
-    <p>{{ formatedName }}</p>
-    <!-- <p>{{ fullName }}</p> -->
+    <h1 class="center">{{ title }}</h1>
+    <section>
+      <div class="container">
+        <div class="input-group mb-3">
+          <input v-model="searchQuery" type="text" class="form-control" placeholder="Buscar canciones">
+          <button v-on:click="search" class="btn btn-outline-secondary" type="button">Buscar</button>
+        </div>
+        {{ searchMessage }}
+        <div v-if="tracks.length">
+          <ul v-for="t in tracks" :key="t">
+            <li>{{ t.artist }}</li>
+            <li>{{ t.name }}</li>
+          </ul>
+        </div>
+        <p v-else>Sin resultados.</p>
+      </div>
+    </section>
+    <child></child>    
   </div>
 </template>
 
 <script>
+import configService from './services/config';
+// import
+const tracksData = [
+    { name: "Foo Fighters", artist: "Everlong" },
+    { name: "Smashing Pumpkins", artist: "Zero" },
+    { name: "Smashing Pumpkins", artist: "Ava Adore" },
+    { name: "Nirvana", artist: "Come As You Are" },
+    { name: "Red Hot Chili Peppers", artist: "Californication" },
+    { name: "Guns N' Roses", artist: "Welcome to the Jungle" }
+];
+
+
 export default {
   name: 'app',
   data () {
     return {
-      message: 'Hello world in Vue.js',
-      showValue: {
-        show: true,
-        text: "Hola, estoy desarrollando con Vue.js :)"
-      },
-      name: "",
-      lastName: "",
-      formatedName: " ",
-      link: "https://www.youtube.com"
+      title: "App Music",
+      searchQuery: "",
+      tracks: []
     }
   },
   methods: {
-    format(){
-      this.formatedName = this.name.split(" ").join("-");
+    search() {
+      console.log(this.searchQuery);
+      this.tracks = tracksData;
     }
   },
 
   computed: {
-    fullName() {
-      return this.name + ", " + this.lastName;
+    searchMessage() {
+      return `Encontrados: ${this.tracks.length}`;
     }
   },
 
   watch: {
-    name(newVal, oldVal) {
-      console.log(newVal, oldVal);
-    }
+
   }
 
 }
 </script>
 
 <style>
-
+.center {
+  align-content: center;
+  text-align: center;
+}
 </style>
